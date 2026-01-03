@@ -1,0 +1,12 @@
+[theme]
+base = "dark"
+
+primaryColor = "#A78BFA"              # soft purple
+backgroundColor = "#0B0A10"           # night
+secondaryBackgroundColor = "#141225"  # deep violet
+textColor = "#EDEBFF"                 # pale lavender
+font = "sans serif"
+
+[server]
+fileWatcherType = "none"
+runOnSave = false

@@ -1,6 +1,6 @@
 # PetSymptomChatbot-NLP2025
 
-Pet Symptom Chatbot: evidence grounded symptom support using hybrid RAG (FAISS + TF-IDF) with cross-encoder reranking and local LLM generation via Ollama. Built with Streamlit.
+Pet Symptom Chatbot: evidence grounded symptom support using hybrid RAG (FAISS + TF-IDF) with cross-encoder reranking and local LLM generation via Ollama (Gemma 2). Built with Streamlit.
 
 ## Key Features
 - Hybrid retrieval: dense (FAISS) + sparse (TF-IDF)
@@ -31,7 +31,12 @@ Run:
 python src/build_embeddings.py
 python src/build_index.py
 ```
-
+### Ollama model (Gemma 2)
+This project uses a local Ollama model (Gemma 2). Ensure it is available locally before running the app.
+Example:
+```bash
+ollama pull gemma2
+```
 Expected outputs in `models/` after building:
 - `chunks.pkl` (chunked documents / passages)
 - `meta.pkl` (metadata per chunk)

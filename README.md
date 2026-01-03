@@ -58,12 +58,17 @@ If you do not want to build indexes locally, download `models.zip` from the Rele
 User query → Hybrid retrieval (FAISS dense + TF-IDF sparse) → Cross-encoder reranking → Evidence selection → Local LLM generation via Ollama (Gemma 2) → Safety check + final response.
 
 ## Example Prompts
-Try these in the app:
+## Example Prompts
+Start with:
+- "Hello, I’m Eva. My dog’s name is Max."
+
+Then try:
 - "My cat is vomiting 3 times today and seems tired. What could it be and what should I monitor?"
 - "My dog has diarrhea for 2 days but is still eating. What home care steps are safe, and when should I see a vet?"
 - "My cat is breathing fast and looks distressed. What should I do right now?"
 - "My dog is scratching a lot and has red skin patches. What are possible causes and what questions should I answer?"
 - "My cat stopped eating since yesterday and is hiding. What information do you need from me?"
+> Note: You can start with a greeting (e.g., "Hello, I’m Eva") and optionally share your pet’s name (e.g., "My dog’s name is Max"). The assistant can remember the provided user/pet names during the session and use them in follow-ups.
 
 ## Sidebar Controls (Settings)
 The app includes a Streamlit sidebar to configure generation and retrieval behavior.

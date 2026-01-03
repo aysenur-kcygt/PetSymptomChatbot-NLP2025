@@ -1,0 +1,4 @@
+[
+  {"pattern": "bleeding|blood|seizure|poison|toxin", "message": "⚠️ This may be an emergency. Seek veterinary help immediately."},
+  {"pattern": "vomit|vomiting|diarrhea|lethargy", "message": "If symptoms persist >24h or worsen, contact a veterinarian."}
+]

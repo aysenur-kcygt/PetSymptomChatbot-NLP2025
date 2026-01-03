@@ -1,0 +1,389 @@
+/* app/styles.css
+   Theme: Dark Night Vet (professional dark, purple + cyan accents)
+*/
+
+/* ---------- Theme tokens ---------- */
+:root{
+  --bg: #0f1420;
+  --panel: #111827;
+  --panel-2: #0f172a;
+  --border: rgba(255,255,255,0.08);
+
+  --text: rgba(255,255,255,0.92);
+  --muted: rgba(255,255,255,0.68);
+
+  --accent: #7c3aed;     /* purple */
+  --accent-2: #22d3ee;   /* cyan */
+  --good: #10b981;
+  --warn: #f59e0b;
+  --danger: #ef4444;
+
+  --shadow: 0 10px 30px rgba(0,0,0,0.45);
+  --radius: 18px;
+  --radius-sm: 12px;
+}
+
+/* ---------- App background ---------- */
+.stApp {
+  background: radial-gradient(1200px 600px at 10% 0%, rgba(124,58,237,0.18), transparent 60%),
+              radial-gradient(900px 500px at 90% 10%, rgba(34,211,238,0.12), transparent 55%),
+              var(--bg);
+  color: var(--text);
+}
+
+/* Limit max width a bit for readability */
+.block-container {
+  max-width: 960px;
+  padding-top: 2.2rem;
+  padding-bottom: 2.2rem;
+}
+
+/* ---------- Typography ---------- */
+html, body, [class*="css"] {
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+h1, h2, h3 {
+  letter-spacing: 0.2px;
+}
+
+.stMarkdown, .stCaption, p, li {
+  color: var(--text);
+}
+
+.stCaption {
+  color: var(--muted) !important;
+}
+
+/* ---------- Sidebar ---------- */
+section[data-testid="stSidebar"] {
+  background: linear-gradient(180deg, rgba(17,24,39,0.95), rgba(15,23,42,0.95)) !important;
+  border-right: 1px solid var(--border);
+}
+
+section[data-testid="stSidebar"] .stMarkdown,
+section[data-testid="stSidebar"] label,
+section[data-testid="stSidebar"] p,
+section[data-testid="stSidebar"] span {
+  color: var(--text) !important;
+}
+
+/* ---------- Inputs / controls ---------- */
+div[data-baseweb="select"] > div,
+div[data-baseweb="input"] > div,
+div[data-testid="stTextArea"] textarea,
+div[data-testid="stTextInput"] input {
+  background: rgba(255,255,255,0.04) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-sm) !important;
+  box-shadow: none !important;
+}
+
+div[data-baseweb="select"] * ,
+div[data-baseweb="input"] * {
+  color: var(--text) !important;
+}
+
+/* Sliders */
+div[data-testid="stSlider"] > div {
+  padding-top: 0.25rem;
+}
+
+/* Toggle */
+div[data-testid="stToggle"] label {
+  color: var(--text) !important;
+}
+
+/* ---------- Buttons ---------- */
+.stButton > button {
+  border-radius: 999px !important;
+  border: 1px solid rgba(124,58,237,0.35) !important;
+  background: linear-gradient(135deg, rgba(124,58,237,0.25), rgba(34,211,238,0.12)) !important;
+  color: var(--text) !important;
+  box-shadow: var(--shadow);
+  transition: transform 120ms ease, border-color 120ms ease, filter 120ms ease;
+}
+
+.stButton > button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(34,211,238,0.55) !important;
+  filter: brightness(1.05);
+}
+
+.stButton > button:active {
+  transform: translateY(0px);
+}
+
+/* ---------- Chat bubbles ---------- */
+div[data-testid="stChatMessage"] {
+  padding: 0.25rem 0;
+}
+
+div[data-testid="stChatMessage"] > div {
+  border-radius: var(--radius);
+}
+
+/* Try to style the message container itself */
+div[data-testid="stChatMessage"] [data-testid="stChatMessageContent"] {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+/* Assistant messages: slightly different tint */
+div[data-testid="stChatMessage"][data-testid*="assistant"] [data-testid="stChatMessageContent"] {
+  background: linear-gradient(180deg, rgba(124,58,237,0.08), rgba(255,255,255,0.03));
+}
+
+/* User messages */
+div[data-testid="stChatMessage"][data-testid*="user"] [data-testid="stChatMessageContent"] {
+  background: linear-gradient(180deg, rgba(34,211,238,0.06), rgba(255,255,255,0.03));
+}
+
+/* Chat input outer shell */
+div[data-testid="stChatInput"] {
+  max-width: 960px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* The pill container that holds textarea + send button */
+div[data-testid="stChatInput"] > div {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(34,211,238,0.30) !important;        
+  box-shadow:
+    0 0 0 1px rgba(34,211,238,0.12),                            
+    0 10px 30px rgba(0,0,0,0.45) !important;                    
+  border-radius: 999px !important;
+  padding: 0.45rem 0.60rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+}
+div[data-testid="stChatInput"] textarea:focus {
+  outline: none !important;
+}
+
+div[data-testid="stChatInput"] > div:has(textarea:focus) {
+  border-color: rgba(34,211,238,0.55) !important;
+  box-shadow:
+    0 0 0 3px rgba(34,211,238,0.16),
+    0 10px 30px rgba(0,0,0,0.45) !important;
+}
+
+/* Textarea itself */
+div[data-testid="stChatInput"] textarea {
+  background: transparent !important; /* dış kabı boyuyoruz */
+  border: none !important;
+  border-radius: 999px !important;
+  padding: 0.55rem 0.25rem !important;
+  line-height: 1.35 !important;
+  color: var(--text) !important;
+  outline: none !important;
+}
+
+/* Placeholder alignment and tone */
+div[data-testid="stChatInput"] textarea::placeholder {
+  color: rgba(255,255,255,0.65) !important;
+  opacity: 1 !important;
+}
+
+/* Send button */
+div[data-testid="stChatInput"] button {
+  height: 2.55rem !important;
+  width: 2.55rem !important;
+  min-width: 2.55rem !important;
+  border-radius: 999px !important;
+  background: rgba(124,58,237,0.22) !important;
+  border: 1px solid rgba(124,58,237,0.35) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* tiny nudge for the arrow icon */
+div[data-testid="stChatInput"] button svg {
+  transform: translateY(-0.5px);
+}
+
+/* ---------- Expanders (Sources / Nearby vets) ---------- */
+details[data-testid="stExpander"] {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: rgba(255,255,255,0.03);
+  box-shadow: var(--shadow);
+}
+
+details[data-testid="stExpander"] summary {
+  color: var(--text);
+  padding: 0.25rem 0.5rem;
+}
+
+details[data-testid="stExpander"] a {
+  color: var(--accent-2);
+  text-decoration: none;
+}
+
+details[data-testid="stExpander"] a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Built-in status boxes ---------- */
+div[data-testid="stAlert"] {
+  border-radius: var(--radius) !important;
+  border: 1px solid var(--border) !important;
+  background: rgba(255,255,255,0.04) !important;
+  box-shadow: var(--shadow);
+}
+
+/* ---------- Links ---------- */
+a {
+  color: var(--accent-2);
+}
+
+a:hover {
+  color: #67e8f9;
+}
+
+/* ---------- Small polish ---------- */
+hr {
+  border-color: var(--border);
+}
+
+code, pre {
+  background: rgba(255,255,255,0.04) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-sm) !important;
+  color: var(--text) !important;
+}
+
+/* Bottom dock area behind the chat input: make it transparent */
+div[data-testid="stBottom"] {
+  background: transparent !important;
+}
+
+/* Some versions use a sticky container class for bottom */
+div[data-testid="stBottomBlockContainer"] {
+  background: transparent !important;
+}
+
+/* Ensure no extra overlay gradient sits at the bottom */
+.stApp::before, .stApp::after {
+  background: none !important;
+}
+
+header[data-testid="stHeader"]{
+  background: transparent !important;
+}
+
+.block-container{
+  padding-top: 4.2rem !important;   /* sende 2.2rem idi */
+}
+
+/* Chat avatar circles: smaller + softer */
+div[data-testid="stChatMessage"] img {
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 999px !important;
+  opacity: 0.9;
+  filter: saturate(0.9);
+}
+
+/* If they are SVG icons inside circles, tone down */
+div[data-testid="stChatMessage"] svg {
+  opacity: 0.85;
+}
+/* Assistant avatar: purple */
+.stChatMessage:has([data-testid="stChatMessageAvatarAssistant"]) [data-testid^="stChatMessageAvatar"]{
+  background: rgba(124,58,237,0.22) !important;
+  border: 1px solid rgba(124,58,237,0.35) !important;
+}
+.stChatMessage:has([data-testid="stChatMessageAvatarAssistant"]) [data-testid^="stChatMessageAvatar"] svg{
+  color: #A78BFA !important;
+  fill: #A78BFA !important;
+}
+
+/* User avatar: cyan */
+.stChatMessage:has([data-testid="stChatMessageAvatarUser"]) [data-testid^="stChatMessageAvatar"]{
+  background: rgba(34,211,238,0.18) !important;
+  border: 1px solid rgba(34,211,238,0.35) !important;
+}
+.stChatMessage:has([data-testid="stChatMessageAvatarUser"]) [data-testid^="stChatMessageAvatar"] svg{
+  color: #22D3EE !important;
+  fill: #22D3EE !important;
+}
+/* =========================
+   FINAL: chat bubble spacing + colored borders
+   ========================= */
+
+/* no grey full-width rows */
+div[data-testid="stChatMessage"],
+div[data-testid="stChatMessage"] > div,
+div[data-testid="stChatMessage"] > div > div{
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* bubble shell */
+div[data-testid="stChatMessage"] [data-testid="stChatMessageContent"]{
+  border-radius: 18px !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  background: rgba(255,255,255,0.04) !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45) !important;
+
+  /* IMPORTANT: some Streamlit versions put text inside an inner wrapper,
+     so we keep outer padding small and set padding on inner too */
+  padding: 14px 18px 14px 28px !important; /* <-- THIS is your left space */
+}
+
+/* if Streamlit wraps the text in an inner div, enforce padding there too */
+div[data-testid="stChatMessage"] [data-testid="stChatMessageContent"] > div{
+  padding: 0 !important; /* prevent double padding */
+  margin: 0 !important;
+}
+
+/* assistant bubble */
+div[data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"])
+  [data-testid="stChatMessageContent"]{
+  border-color: rgba(124,58,237,0.70) !important;
+  background: linear-gradient(180deg, rgba(124,58,237,0.12), rgba(255,255,255,0.03)) !important;
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.45),
+    0 0 0 1px rgba(124,58,237,0.18) !important;
+}
+
+/* user bubble */
+div[data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"])
+  [data-testid="stChatMessageContent"]{
+  border-color: rgba(34,211,238,0.70) !important;
+  background: linear-gradient(180deg, rgba(34,211,238,0.08), rgba(255,255,255,0.03)) !important;
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.45),
+    0 0 0 1px rgba(34,211,238,0.16) !important;
+}
+
+/* ===== FIX: shrink markdown headings inside chat bubbles ===== */
+div[data-testid="stChatMessageContent"] h1,
+div[data-testid="stChatMessageContent"] h2,
+div[data-testid="stChatMessageContent"] h3 {
+  font-size: 1.35rem !important;
+  line-height: 1.15 !important;
+  margin: 0.35rem 0 0.55rem 0 !important;
+  font-weight: 800 !important;
+}
+
+div[data-testid="stChatMessageContent"] h4,
+div[data-testid="stChatMessageContent"] h5,
+div[data-testid="stChatMessageContent"] h6 {
+  font-size: 1.1rem !important;
+  line-height: 1.2 !important;
+  margin: 0.25rem 0 0.45rem 0 !important;
+  font-weight: 750 !important;
+}
+
+
+
+

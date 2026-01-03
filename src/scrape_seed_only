@@ -1,0 +1,169 @@
+import csv
+import time
+import re
+from pathlib import Path
+import requests
+from bs4 import BeautifulSoup
+from urllib.parse import urlparse
+
+HEADERS = {"User-Agent": "Mozilla/5.0 (PetSymptomChatbot; contact: you@example.com)"}
+TIMEOUT = 30
+SLEEP_SEC = 0.9
+
+TRIAGE_KEYWORDS = [
+    "when to call the vet",
+    "when to see a vet",
+    "when to see the vet",
+    "when to contact your veterinarian",
+    "call your veterinarian",
+    "seek veterinary care",
+    "emergency",
+    "warning signs",
+    "when to go to the vet",
+    "go to an emergency vet",
+    "take your pet to the vet",
+]
+
+def norm(s: str) -> str:
+    return " ".join((s or "").split()).strip()
+
+def detect_species_from_url(url: str) -> str:
+    u = (url or "").lower()
+    if "/dog/" in u:
+        return "dog"
+    if "/cat/" in u:
+        return "cat"
+    return "unknown"
+
+def source_from_url(url: str) -> str:
+    host = urlparse(url).netloc.lower()
+    if "petmd.com" in host:
+        return "petmd"
+    if "vcahospitals.com" in host:
+        return "vca"
+    return host.replace("www.", "")
+
+def safe_get(url: str):
+    r = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
+    r.raise_for_status()
+    return r
+
+def uniq_list(items):
+    seen, out = set(), []
+    for x in items:
+        if x not in seen:
+            out.append(x)
+            seen.add(x)
+    return out
+
+def extract_main_text_blocks(soup: BeautifulSoup):
+    ps = soup.select("p")
+    lis = soup.select("li")
+    text = " ".join(
+        [p.get_text(" ", strip=True) for p in ps] +
+        [li.get_text(" ", strip=True) for li in lis]
+    )
+    return norm(text)
+
+def split_into_sections(title: str, body: str):
+    chunks = []
+    if len(body) >= 200:
+        chunks.append(("general", f"{title}. {body}"))
+
+    sentences = re.split(r"(?<=[.!?])\s+", body)
+    triage_sents = []
+    for s in sentences:
+        ls = s.lower()
+        if any(k in ls for k in TRIAGE_KEYWORDS):
+            triage_sents.append(s)
+
+    triage_text = norm(" ".join(triage_sents))
+    if len(triage_text) >= 120:
+        chunks.append(("when_to_see_vet", f"{title}. {triage_text}"))
+    return chunks
+
+def scrape_url(url: str):
+    r = safe_get(url)
+    soup = BeautifulSoup(r.text, "lxml")
+
+    h1 = soup.select_one("h1")
+    title = norm(h1.get_text(" ", strip=True) if h1 else url)
+
+    body = extract_main_text_blocks(soup)
+    if len(body) < 200:
+        return []
+
+    src = source_from_url(url)
+    sp = detect_species_from_url(url)
+
+    out_rows = []
+    for section, text in split_into_sections(title, body):
+        out_rows.append({
+            "url": url,
+            "title": title,
+            "source": src,
+            "species": sp,
+            "section": section,
+            "text": text
+        })
+    return out_rows
+
+def load_seed_urls(path: Path):
+    if not path.exists():
+        print(f"[WARN] Seed file not found: {path}")
+        return []
+    urls = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        u = line.strip()
+        if not u or u.startswith("#"):
+            continue
+        if u.startswith("www."):
+            u = "https://" + u
+        if not (u.startswith("http://") or u.startswith("https://")):
+            continue
+        urls.append(u)
+    urls = uniq_list(urls)
+    print(f"[SEED] Loaded {len(urls)} urls from {path}")
+    return urls
+
+def load_existing_urls(csv_path: Path):
+    if not csv_path.exists():
+        return set()
+    existing = set()
+    with open(csv_path, "r", encoding="utf-8") as f:
+        r = csv.DictReader(f)
+        for row in r:
+            u = (row.get("url") or "").strip()
+            if u:
+                existing.add(u)
+    return existing
+
+if __name__ == "__main__":
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    seed_path = BASE_DIR / "sources" / "seed_urls_merged.txt"
+    main_corpus_path = BASE_DIR / "data" / "pet_corpus_multi.csv"
+    out_path = BASE_DIR / "data" / "seed_corpus.csv"
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+
+    seed_urls = load_seed_urls(seed_path)
+    existing_urls = load_existing_urls(main_corpus_path)
+    if existing_urls:
+        seed_urls = [u for u in seed_urls if u not in existing_urls]
+        print(f"[SEED] After skipping existing corpus URLs: {len(seed_urls)}")
+
+    rows = []
+    for i, url in enumerate(seed_urls, start=1):
+        print(f"{i}/{len(seed_urls)} {url}")
+        try:
+            rows.extend(scrape_url(url))
+            time.sleep(SLEEP_SEC)
+        except Exception as e:
+            print("Error:", e)
+            time.sleep(1.2)
+
+    with open(out_path, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=["url","title","source","species","section","text"])
+        w.writeheader()
+        w.writerows(rows)
+
+    print(f"Saved {len(rows)} chunks -> {out_path}")

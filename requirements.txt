@@ -1,6 +1,9 @@
 streamlit
-faiss-cpu
-sentence-transformers
 pandas
 numpy
+scikit-learn
+scipy
+faiss-cpu
+sentence-transformers
+torch
 ollama

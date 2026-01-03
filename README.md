@@ -51,6 +51,8 @@ Expected outputs in `models/` after building:
 ```bash
 streamlit run app/chat_app.py
 ```
+## Optional: Download prebuilt `models/`
+If you do not want to build indexes locally, download `models.zip` from the Releases page, unzip it, and place the `models/` folder at the repository root.
 
 ## Notes on Safety and Scope
 This project provides evidence-grounded informational support and basic triage-style guidance. It is not a veterinary diagnosis tool. If symptoms are severe (e.g., breathing distress, collapse, uncontrolled bleeding, seizures), users should seek urgent veterinary care.

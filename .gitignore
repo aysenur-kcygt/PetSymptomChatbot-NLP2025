@@ -205,3 +205,20 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Streamlit secrets (never commit)
+.streamlit/secrets.toml
+
+# Generated retrieval artifacts (often large)
+models/
+faiss_index/
+indexes/
+*.bin
+*.pkl
+
+# Optional: if your data is not meant to be public or is large
+data/
+datasets/
+outputs/
+logs/
+cache_vet/
